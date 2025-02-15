@@ -17,9 +17,14 @@ function ModeSelect() {
     setMode(selectedMode)
     // setAge(event.target.value)
   }
-
   return (
-    <FormControl size="small">
+    <FormControl
+      size="small"
+      sx={{
+        minWidth: '120px',
+        '& .MuiSelect-select': { padding: '7.5px 14px' },
+      }}
+    >
       <InputLabel id="label-select-dark-light-mode">Mode</InputLabel>
       <Select
         labelId="label-select-dark-light-mode"
