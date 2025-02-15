@@ -22,6 +22,25 @@ const theme = extendTheme({
     },
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          '*::-webkit-scrollbar':{
+            width: '8px',
+            height: '8px',
+            // display: 'none'
+          },
+          '*::-webkit-scrollbar-thumb':{
+            backgroundColor: '#bdc3c7',
+            borderRadius: '8px'
+          },
+          '*::-webkit-scrollbar-thumb:hover':{
+            backgroundColor: '#00b894',
+            borderRadius: '8px'
+          }
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -34,7 +53,7 @@ const theme = extendTheme({
         root: ({ theme }) => {
           return {
             color: theme.palette.primary.main,
-            fontSize: '0.875rem'
+            fontSize: '0.875rem',
           }
         },
       },
