@@ -32,7 +32,7 @@ function Profiles() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 30, height: 32 }}
+            sx={{ width: 34, height: 34 }}
             alt="Vũ Cát Tường"
             src="https://images2.thanhnien.vn/528068263637045248/2025/2/9/vu-cat-tuong-4-1739081808195881252759.jpg"
           />{' '}
