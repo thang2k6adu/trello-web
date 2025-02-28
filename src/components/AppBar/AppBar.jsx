@@ -1,6 +1,6 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
-import ModeSelect from '~/components/ModeSelect'
+import ModeSelect from '~/components/ModeSelect/ModeSelect'
 import AppsIcon from '@mui/icons-material/Apps'
 import { ReactComponent as TrelloIcon } from '~/assets/mdi--trello.svg'
 import SvgIcon from '@mui/material/SvgIcon'
@@ -34,19 +34,13 @@ function AppBar() {
         gap: 2,
         px: 2,
         overflowX: 'auto',
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'dark' ? '#2c3e50' : '#1565C0',
+        backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565C0'),
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <AppsIcon sx={{ color: 'white' }} />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <SvgIcon
-            component={TrelloIcon}
-            inheritViewBox
-            sx={{ color: 'white' }}
-            fontSize="Small"
-          />
+          <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: 'white' }} fontSize="Small" />
           <Typography
             variant="span"
             sx={{
