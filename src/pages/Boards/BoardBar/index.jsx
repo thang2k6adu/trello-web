@@ -92,8 +92,17 @@ function BoardBar() {
           max={7}
           sx={{
             gap: '10px',
-            // border: 'none',
-            '& .MuiAvatar-root': { width: 34, height: 34, fontSize: 16 },
+            '& .MuiAvatar-root': {
+              width: 34,
+              height: 34,
+              fontSize: 15,
+              // border: 'none',
+              color: 'white',
+              cursor: 'pointer',
+              '&:first-of-type': {
+                backgroundColor: '#a4b0be'
+              }
+            },
           }}
         >
           <Tooltip title="thang2k6adu">
