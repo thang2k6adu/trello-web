@@ -17,8 +17,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utils/sort'
 
-function Column() {
+function Column({ column }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -27,6 +28,9 @@ function Column() {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
   return (
     <Box
       sx={{
@@ -49,6 +53,7 @@ function Column() {
           justifyContent: 'space-between',
         }}
       >
+        {/* Column title */}
         <Typography
           variant="h6"
           sx={{
@@ -57,8 +62,9 @@ function Column() {
             cursor: 'pointer',
           }}
         >
-          Column Title
+          {column?.title}
         </Typography>
+        {/* Column option */}
         <Box>
           <Tooltip title="More options">
             <ExpandMoreIcon
@@ -120,7 +126,7 @@ function Column() {
         </Box>
       </Box>
       {/* List Cards */}
-      <ListCards />
+      <ListCards cards={orderedCards}/>
       {/* Column Footer */}
       <Box
         sx={{
