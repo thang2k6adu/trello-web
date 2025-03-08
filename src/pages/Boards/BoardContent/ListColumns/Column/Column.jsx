@@ -19,7 +19,27 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
 import { mapOrder } from '~/utils/sort'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 function Column({ column }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column._id,
+    data: { ...column },
+  })
+  const dndKitColumnStyles = {
+    // Trên di động, thao tác cuộn, thu phóng ưu tiên hơn là kéo thả
+    // nếu không có touch-action thì kéo thả sẽ không được, thay vào đó là cuộn, thu phóng
+    // touchAction: 'none',
+
+    //transform là giá trị của useSortable trả về
+    //chứa tọa độ di chuyển (x,y, scaleX, scaleY)
+    //translate không áp dụng scale transform
+    transform: CSS.Translate.toString(transform),
+    // mặc định transition"transform 250ms ease"
+    transition,
+  }
+  // drop-down menu
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -29,10 +49,15 @@ function Column({ column }) {
     setAnchorEl(null)
   }
 
+  // card sorting
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   return (
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: '300px',
         maxWidth: '300px',
@@ -126,7 +151,7 @@ function Column({ column }) {
         </Box>
       </Box>
       {/* List Cards */}
-      <ListCards cards={orderedCards}/>
+      <ListCards cards={orderedCards} />
       {/* Column Footer */}
       <Box
         sx={{
