@@ -5,12 +5,11 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 
 function ListColumns({ columns }) {
-
-  // sortableContext yêu cầu items là một mảng dạng ['id-1', 'id-2'] 
+  // sortableContext yêu cầu items là một mảng dạng ['id-1', 'id-2']
   // Tức là 1 mảng với phần tử là dữ liệu nguyên thủy thay vì tham chiếu
   // Không đúng thì vẫn kéo thả được nhưng không có animation
   return (
-    <SortableContext items={columns?.map(c => c._id)} strategy={horizontalListSortingStrategy}>
+    <SortableContext items={columns?.map((c) => c._id)} strategy={horizontalListSortingStrategy}>
       <Box
         sx={{
           backgroundColor: 'inherit',
