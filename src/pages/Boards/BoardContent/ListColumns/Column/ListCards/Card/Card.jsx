@@ -27,7 +27,8 @@ function Card({ card }) {
     transform: CSS.Translate.toString(transform),
     // mặc định transition"transform 250ms ease"
     transition,
-    opacity: isDragging ? 0.5 : undefined
+    opacity: isDragging ? 0.5 : undefined,
+    border: isDragging ? '1px solid #2ecc71' : undefined
 
   }
 
