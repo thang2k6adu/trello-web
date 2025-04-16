@@ -14,7 +14,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, set } from 'lodash'
 
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -29,6 +29,7 @@ function BoardContent({ board }) {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
+  const [oldColumn, setOldColumn] = useState(null)
 
   // activationConstrain: hạn chế kích hoạt, distance 10px mới kích hoạt kéo, fix click bị gọi event, tránh kéo thả không mong muốn
   // distance và tolerance, máy tính và điện thoại, dùng pointerSensor phải dùng thuộc tính touch-action + còn bugs
@@ -57,7 +58,14 @@ function BoardContent({ board }) {
     setActiveDragItemType(
       e?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN
     )
+
     setActiveDragItemData(e?.active?.data?.current)
+
+    // Nếu kéo thả card thì mới thực hiện hành động set giá trị oldColumn
+    if (e?.active?.data?.current?.columnId) {
+      // Tìm column theo cardId
+      setOldColumn(findColumnByCardId(e?.active?.id))
+    }
   }
 
   // Được gọi trong quá trình kéo 1 phần tử
@@ -132,36 +140,84 @@ function BoardContent({ board }) {
 
   // Kết thúc việc kéo phần tử
   const handleDragEnd = (e) => {
-    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      console.log('keo tha card')
-      return
-    }
-    console.log('handleDragEnd:', e)
+    // console.log('handleDragEnd:', e)
 
     const { active, over } = e
     //Kiểm tra nếu không tồn tại over (kéo linh tinh ra ngoài thì return luôn, tránh lôi)
-    if (!over) return
+    if (!active || !over) return
 
-    // Nếu vị trí kéo khác vị trí ban đầu
-    if (active.id != over.id) {
-      //lấy vị trí cũ của active, là vị trí 1, 2, 3, ... trong mảng
-      const oldIndex = orderedColumns.findIndex((c) => c._id === active.id)
-      //lấy vị trí cũ của active
-      const newIndex = orderedColumns.findIndex((c) => c._id === over.id)
+    // activeDragItemType là cái mà chúng ta đang kéo
+    // Xử lí kéo thả Card
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      // activeDraggingCardId là cái mà chúng ta đang kéo
+      const {
+        id: activeDraggingCardId,
+        data: { current: activeDraggingCardData },
+      } = active
+      // overCardId là cái mà active đang tương tác với (hiểu đơn giản là sắp thả vào đó)
+      const { id: overCardId } = over
 
-      // arrayMove để thay đổi columns khi kéo thả (mảng object)
-      const dndOrderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
-      // Xử lí thay đổi lên API, F5 không bị refresh (mảng giá trị)
-      // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+      // Tìm 2 column mà cái active và over thuộc về
+      const activeColumn = findColumnByCardId(activeDraggingCardId)
+      const overColumn = findColumnByCardId(overCardId)
 
-      //cập nhật lại state sau khi kéo thả
-      setOrderedColumns(dndOrderedColumns)
+      // Nếu không tồn tại một trong 2 column thì không làm gì hết, tránh crash web
+      if (!oldColumn || !overColumn) return
+
+      // Kéo thả card qua 2 column khác nhau
+      // Phải dùng tới oldColumn chứ không phải activeColumn, vì sau khi đi qua onDragOver thì state đã bị thay đổi
+      // chưa kịp thả thì đã thay đổi state rồi, nên activeColumn lúc này luôn bằng overColumn
+      if (oldColumn._id !== overColumn._id) {
+        console.log('activeColumn khác overColumn')
+      } else {
+        //lấy vị trí cũ của active, là vị trí 1, 2, 3, ... trong mảng
+        const oldCardIndex = oldColumn?.cards.findIndex((c) => c._id === activeDragItemId)
+        //lấy vị trí mới
+        const newCardIndex = overColumn?.cards.findIndex((c) => c._id === overCardId)
+
+        // Dùng arrayMove để thay đổi cards khi kéo thả (mảng object) tương tự với column
+        // arrayMove(oldColumn?.cards, oldCardIndex, newCardIndex) => trả về mảng mới với vị trí đã được thay đổi
+        const dndOrderedCards = arrayMove(oldColumn?.cards, oldCardIndex, newCardIndex)
+
+        setOrderedColumns((preColumns) => {
+          // Bản chất là ta đang clone mảng OrderedColumnsState cũ ra một cái mới để xử lí data rồi return
+          // Cập nhật lại OrderedColumnsState mới
+          const nextColumns = cloneDeep(preColumns)
+          // Tìm column đang thả
+          const targetColumn = nextColumns.find((column) => column._id === overColumn._id)
+
+          // Cập nhật lại 2 giá trị mới là card và cardOrderIds trong targetColumn
+          targetColumn.cards = dndOrderedCards
+          targetColumn.cardOrderIds = dndOrderedCards.map((card) => card._id)
+          return nextColumns
+        })
+      }
     }
 
-    // Chỉ khi kéo mới dữ liệu, end rồi thì set null
+    // Xử lí kéo thả Column
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      // Nếu vị trí kéo khác vị trí ban đầu
+      if (active.id != over.id) {
+        //lấy vị trí cũ của active, là vị trí 1, 2, 3, ... trong mảng
+        const oldColumnIndex = orderedColumns.findIndex((c) => c._id === active.id)
+        //lấy vị trí mới
+        const newColumnIndex = orderedColumns.findIndex((c) => c._id === over.id)
+
+        // arrayMove để thay đổi columns khi kéo thả (mảng object)
+        const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
+        // Xử lí thay đổi lên API, F5 không bị refresh (mảng giá trị)
+        // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
+
+        //cập nhật lại state sau khi kéo thả
+        setOrderedColumns(dndOrderedColumns)
+      }
+    }
+
+    // Những dữ liệu sau khi kéo thả xong sẽ phải đưa về giá trị null
     setActiveDragItemId(null)
     setActiveDragItemType(null)
     setActiveDragItemData(null)
+    setOldColumn(null)
   }
 
   //Animation khi thả phần tử (Drop) - chỗ overlay không bị giật, biến mất nhanh chóng
