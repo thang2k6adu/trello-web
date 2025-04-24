@@ -18,14 +18,14 @@ import {
   DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
-  closestCenter,
+  // closestCenter,
   pointerWithin,
-  rectIntersection,
+  // rectIntersection,
   getFirstCollision,
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { cloneDeep, set } from 'lodash'
+import { cloneDeep } from 'lodash'
 
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -209,7 +209,6 @@ function BoardContent({ board }) {
       // Phải dùng tới oldColumn chứ không phải activeColumn, vì sau khi đi qua onDragOver thì state đã bị thay đổi
       // chưa kịp thả thì đã thay đổi state rồi, nên activeColumn lúc này luôn bằng overColumn
       if (oldColumn._id !== overColumn._id) {
-
         moveCardBetweenDifferentColumns(
           overColumn,
           overCardId,
@@ -282,15 +281,19 @@ function BoardContent({ board }) {
         return closestCorners({ ...args })
       }
 
-      // Tìm ra các điểm giao nhau, va chạm - intersection với contror
+      // Tìm ra các điểm giao nhau, va chạm - intersection với contror, trả về một mảng các va chạm
       const pointerIntersections = pointerWithin(args)
+
+      // fix triệt để lỗi flickering
+      // -Kéo 1 cảd có image cover lớn và kéo lên trên cùng ra khỏi khu vực kéo thả
+      if (!pointerIntersections?.length) return
       // intersection là vị trí giao nhau của 2 hình (định vị bằng cardId và columnid)
       // Ví dụ, khi kéo thả card qua column khác, điểm va chạm sẽ là card trong colum kia
       // Nếu có giá trị thì sẽ lấy giá trị đó, nếu không thì sẽ lấy giá trị của rectIntersection
-      const intersections = pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
+      // const intersections = pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
 
       // Tìm overId troing đống intersections trên
-      let overId = getFirstCollision(intersections, 'id')
+      let overId = getFirstCollision(pointerIntersections, 'id')
 
       if (overId) {
         // Nếu over là column thì sẽ tìm tới cardId gần nhất bên trong khu vực đó dựa vào thuật toán phát hiện va chạm closestCenter hoặc closestCorners
@@ -298,7 +301,7 @@ function BoardContent({ board }) {
         const checkColumn = orderedColumns.find((column) => column._id === overId)
         if (checkColumn) {
           // console.log('overId before', overId)
-          overId = closestCenter({
+          overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter((container) => {
               return container.id !== overId && checkColumn?.cardOrderIds.includes(container.id)
