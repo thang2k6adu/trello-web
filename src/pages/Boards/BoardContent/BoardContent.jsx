@@ -2,6 +2,13 @@ import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sort'
 
+/**
+ * Imports drag and drop related utilities from @dnd-kit/core for implementing
+ * interactive drag and drop functionality in the board component.
+ *
+ * Includes sensors for mouse and touch interactions, drag overlay management,
+ * collision detection strategies, and drag event handling utilities.
+ */
 import {
   DndContext,
   MouseSensor,
@@ -11,9 +18,13 @@ import {
   DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
+  closestCenter,
+  pointerWithin,
+  rectIntersection,
+  getFirstCollision,
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { cloneDeep, set } from 'lodash'
 
 import Column from './ListColumns/Column/Column'
@@ -30,6 +41,9 @@ function BoardContent({ board }) {
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const [oldColumn, setOldColumn] = useState(null)
+
+  // Điểm va chạm cuối cùng trước đó (xử lý thuật toán phát hiện va chạm)
+  const lastOverId = useRef(null)
 
   // activationConstrain: hạn chế kích hoạt, distance 10px mới kích hoạt kéo, fix click bị gọi event, tránh kéo thả không mong muốn
   // distance và tolerance, máy tính và điện thoại, dùng pointerSensor phải dùng thuộc tính touch-action + còn bugs
@@ -258,6 +272,49 @@ function BoardContent({ board }) {
   const customDropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({ styles: { active: { opacity: '0.5' } } }),
   }
+
+  const collisionDetectionStrategy = useCallback(
+    (args) => {
+      // Kéo column thì dùng closestCorners
+      if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+        return closestCorners({ ...args })
+      }
+
+      // Tìm ra các điểm giao nhau, va chạm - intersection với contror
+      const pointerIntersections = pointerWithin(args)
+      // intersection là vị trí giao nhau của 2 hình (định vị bằng cardId và columnid)
+      // Ví dụ, khi kéo thả card qua column khác, điểm va chạm sẽ là card trong colum kia
+      // Nếu có giá trị thì sẽ lấy giá trị đó, nếu không thì sẽ lấy giá trị của rectIntersection
+      const intersections = pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
+
+      // Tìm overId troing đống intersections trên
+      let overId = getFirstCollision(intersections, 'id')
+
+      if (overId) {
+        // Nếu over là column thì sẽ tìm tới cardId gần nhất bên trong khu vực đó dựa vào thuật toán phát hiện va chạm closestCenter hoặc closestCorners
+        // overId có thể là: card hiện tại, sau đó kéo tới column, rồi tới card của column đó
+        const checkColumn = orderedColumns.find((column) => column._id === overId)
+        if (checkColumn) {
+          // console.log('overId before', overId)
+          overId = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter((container) => {
+              return container.id !== overId && checkColumn?.cardOrderIds.includes(container.id)
+            }),
+          })[0]?.id
+          // console.log('overId after', overId)
+        }
+
+        lastOverId.current = overId
+        return [{ id: overId }]
+      }
+
+      // Nếu overId là null thì trả về mảng rỗng - tránh crash web
+      return lastOverId.current ? [{ id: lastOverId.current }] : []
+    },
+    [activeDragItemType, orderedColumns]
+  )
+
   return (
     <DndContext
       onDragStart={handleDragStart}
@@ -269,6 +326,9 @@ function BoardContent({ board }) {
       //  vì nó đang bị xung đột giữa card và column, không dùng closestCenters được)
       // nếu chỉ dùng closestCorners thì sẽ có bug flickering + sai lệch dữ liệu
       // collisionDetection={closestCorners}
+
+      // Tự custom nâng cao thuật toán phát hiện va chạm
+      collisionDetection={collisionDetectionStrategy}
 
       // Tự custom nâng cao thuật toán phát hiện va chạm
     >
