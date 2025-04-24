@@ -188,12 +188,14 @@ function BoardContent({ board }) {
       const overColumn = findColumnByCardId(overCardId)
 
       // Nếu không tồn tại một trong 2 column thì không làm gì hết, tránh crash web
+
       if (!activeColumn || !overColumn) return
 
       // Kéo thả card qua 2 column khác nhau
       // Phải dùng tới oldColumn chứ không phải activeColumn, vì sau khi đi qua onDragOver thì state đã bị thay đổi
       // chưa kịp thả thì đã thay đổi state rồi, nên activeColumn lúc này luôn bằng overColumn
       if (oldColumn._id !== overColumn._id) {
+
         moveCardBetweenDifferentColumns(
           overColumn,
           overCardId,
