@@ -126,7 +126,6 @@ function BoardContent({ board }) {
         // cập nhật lại cardOrderIds
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id)
       }
-      console.log('nextColumns', nextColumns)
       return nextColumns
     })
   }
