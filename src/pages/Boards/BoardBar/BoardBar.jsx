@@ -45,13 +45,15 @@ function BoardBar({ board }) {
       {/* Board Bar left */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         {/* Board title */}
-        <Chip
-          sx={MENU_STYLES}
-          clickable
-          icon={<DashboardIcon />}
-          label={board?.title}
-        />
-        {/* Board type */}
+        <Tooltip title={board?.description}>
+          <Chip
+            sx={MENU_STYLES}
+            clickable
+            icon={<DashboardIcon />}
+            label={board?.title}
+          />
+          {/* Board type */}
+        </Tooltip>
         <Chip
           sx={MENU_STYLES}
           clickable
