@@ -28,8 +28,7 @@ function Card({ card }) {
     // mặc định transition"transform 250ms ease"
     transition,
     opacity: isDragging ? 0.5 : undefined,
-    border: isDragging ? '1px solid #2ecc71' : undefined
-
+    border: isDragging ? '1px solid #2ecc71' : undefined,
   }
 
   const showCardAction = () => {
@@ -41,12 +40,15 @@ function Card({ card }) {
       style={dndKitCardStyles}
       {...attributes}
       {...listeners}
-
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: 'unset',
         display: card?.FE_PlaceholderCard ? 'none' : 'block',
+        border: '1px solid transparent',
+        '&:hover': {
+          borderColor: (theme) => theme.palette.primary.main,
+        },
       }}
     >
       {/* Card Media */}
