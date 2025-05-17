@@ -9,8 +9,24 @@ import { API_ROOT } from '~/utils/constants'
 // Interceptor là một hàm được gọi trước khi request được gửi đi
 // Hiểu đơn giản là đánh chặn vào giữa request và response để xử lí logic ta muốn
 
+
+// Board API
 export const fetchBoardDetailsAPI = async (boardId) => {
   const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`)
   // Lưu ý: axios trả về kết quả qua data
   return response.data
 }
+
+// Column API
+export const createNewColumnAPI = async (newColumnData) => {
+  const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
+  return response.data
+}
+
+// Card API
+export const createNewCardAPI = async (newCardData) => {
+  const response = await axios.post(`${API_ROOT}/v1/cards`, newCardData)
+  return response.data
+}
+
+

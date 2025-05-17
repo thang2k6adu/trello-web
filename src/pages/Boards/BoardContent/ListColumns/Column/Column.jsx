@@ -25,7 +25,7 @@ import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column },
@@ -64,14 +64,18 @@ function Column({ column }) {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter a Card title!')
       return
     }
 
-    console.log(newCardTitle)
-    // Gọi API tạo cột mới ở đây
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id,
+    }
+
+    await createNewCard(newCardData)
 
     // Đóng trạng thái thêm Card mới & clear input
     toggleOpenNewCardForm()
