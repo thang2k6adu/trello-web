@@ -37,7 +37,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
@@ -267,8 +267,10 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
         // arrayMove để thay đổi columns khi kéo thả (mảng object)
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
         // Xử lí thay đổi lên API, F5 không bị refresh (mảng giá trị)
-        // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
 
+        moveColumns(dndOrderedColumns)
+
+        // Vẫn gọi update state ở đây để tránh delay khi gọi API
         //cập nhật lại state sau khi kéo thả
         setOrderedColumns(dndOrderedColumns)
       }
