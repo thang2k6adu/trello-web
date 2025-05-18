@@ -17,7 +17,9 @@ import { mapOrder } from '~/utils/sort'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import { moveCardBetweenDifferentColumnAPI } from '~/apis'
+import { delteColumnDetailsAPI } from '~/apis'
 import Typography from '@mui/material/Typography'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -27,8 +29,6 @@ function Board() {
     const boardId = '6820b46f776dc4a9a7cbfa31'
     fetchBoardDetailsAPI(boardId)
       .then((board) => {
-        console.log('board', board)
-
         // Sắp xếp thứ tự các column ở đây luôn trước khi đưa dữ liệu xuống bên dưới
         board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
 
@@ -151,6 +151,22 @@ function Board() {
     })
   }
 
+  // Xử lý xóa một column và card bên trong nó
+  const deleteColumnDetails = (columnId) => {
+    // Update chuẩn state board
+    // Về bản chất, React không nhận ra thay đổi nếu như gán thẳng vào biến nên ta phải clone nó ra một biến mới
+    // Nếu setState thì nó có thể nhận ra và render mỗi khi thay đổi
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter((c) => c._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter((c) => c !== columnId)
+    setBoard(newBoard)
+
+    // Gọi API xử lí phía BE
+    delteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res?.deleteResult || 'Delete column sucessfully')
+    })
+  }
+
   if (!board)
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -170,6 +186,7 @@ function Board() {
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardBetweenDifferentColumn={moveCardBetweenDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )

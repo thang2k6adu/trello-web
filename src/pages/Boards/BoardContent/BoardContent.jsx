@@ -42,6 +42,7 @@ function BoardContent({
   moveColumns,
   moveCardInTheSameColumn,
   moveCardBetweenDifferentColumn,
+  deleteColumnDetails,
 }) {
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeDragItemId, setActiveDragItemId] = useState(null)
@@ -383,7 +384,12 @@ function BoardContent({
           padding: '10px 0',
         }}
       >
-        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+          deleteColumnDetails={deleteColumnDetails}
+        />
 
         <DragOverlay dropAnimation={customDropAnimation}>
           {/* Trường hợp không kéo thả */}
