@@ -58,6 +58,9 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
   // Board thay đổi thì mới dùng tới (vẫn chạy trong lần mount đầu tiên), đoạn này dùng khi gọi API
   useEffect(() => {
     // Colum đã được sắp xếp bên component cha
+    // Lần trước, ta setOrderedColumn bằng cloneDeep mảng orderids nên hiển thị sẽ là orderids 
+    // (Ví dụ card 3 bản chất là ở 3 nhưng orderids lại cho là 4, nên dù kéo số 4, nó vẫn nhận là 3)
+    // Khi kéo orderIds thì bên _id lại set theo orderidss cũ (lúc này về bản chất card 3 là 1 nhưng lại set orderids là 4)
     setOrderedColumns(board.columns)
   }, [board])
 
