@@ -78,8 +78,15 @@ function Board() {
     const newBoard = { ...board }
     const columnToUpdate = newBoard.columns.find((column) => column._id === createdCard.columnId)
     if (columnToUpdate) {
-      columnToUpdate.cards.push(createdCard)
-      columnToUpdate.cardOrderIds.push(createdCard._id)
+      // Nếu column có placeholder-card thì thay thế nó bằng card mới
+      if (columnToUpdate.cards.some((c) => c.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        // Nếu column có data rồi thì push vào cuối mảng
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
     }
     setBoard(newBoard)
   }
@@ -129,21 +136,28 @@ function Board() {
     setBoard(newBoard)
 
     // Gọi API xử lý phía BE
+    let prevCardOrderIds = dndOrderedColumns.find((c) => c._id === prevColumnId)?.cardOrderIds
+    // Xử lý vấn đề placeholder-card khi kéo card cuối cùng ra khỏi column
+    if (prevCardOrderIds[0].includes('placeholder-card')) {
+      prevCardOrderIds = []
+    }
+
     moveCardBetweenDifferentColumnAPI({
       currentCardId,
       prevColumnId,
-      prevCardOrderIds: dndOrderedColumns.find((c) => c._id === prevColumnId)?.cardOrderIds,
+      prevCardOrderIds,
       nextColumnId,
-      nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)?.cardOrderIds
+      nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)?.cardOrderIds,
     })
   }
 
-  if (!board) return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <CircularProgress/>
-      <Typography>Loading...</Typography>
-    </Box>
-  )
+  if (!board)
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+        <Typography>Loading...</Typography>
+      </Box>
+    )
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
