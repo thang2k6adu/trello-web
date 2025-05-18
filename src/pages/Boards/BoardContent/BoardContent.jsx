@@ -35,7 +35,14 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
+function BoardContent({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumns,
+  moveCardInTheSameColumn,
+  moveCardBetweenDifferentColumn,
+}) {
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
@@ -58,7 +65,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
   // Board thay đổi thì mới dùng tới (vẫn chạy trong lần mount đầu tiên), đoạn này dùng khi gọi API
   useEffect(() => {
     // Colum đã được sắp xếp bên component cha
-    // Lần trước, ta setOrderedColumn bằng cloneDeep mảng orderids nên hiển thị sẽ là orderids 
+    // Lần trước, ta setOrderedColumn bằng cloneDeep mảng orderids nên hiển thị sẽ là orderids
     // (Ví dụ card 3 bản chất là ở 3 nhưng orderids lại cho là 4, nên dù kéo số 4, nó vẫn nhận là 3)
     // Khi kéo orderIds thì bên _id lại set theo orderidss cũ (lúc này về bản chất card 3 là 1 nhưng lại set orderids là 4)
     setOrderedColumns(board.columns)
@@ -69,15 +76,16 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     return orderedColumns.find((column) => column.cards.map((card) => card._id)?.includes(cardId))
   }
 
-  // Func cập nhật lại state khi di chuyển card giữa các column
-  const moveCardBetweenDifferentColumns = (
+  // Func chung cập nhật lại state khi di chuyển card giữa các column
+  const moveCardToDifferentColumns = (
     overColumn,
     overCardId,
     active,
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedColumns((preColumns) => {
       // Tìm vị trí (index) của overCard trong column đích (nơi card đang kéo sắp thả)
@@ -128,6 +136,14 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         // cập nhật lại cardOrderIds
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id)
       }
+
+      // Nếu function được gọi từ handleDragEnd (tức đã kéo thả xong) thì mới gọi API 1 lần ở đây
+      if (triggerFrom === 'handleDragEnd') {
+        // Tốt nhất là nên dùng oldColumn chứ không phải là activeData trong scope này
+        // Vì sau khi đi qua onDragOver thì state đã bị thay đổi 1 lần rồi
+        moveCardBetweenDifferentColumn(activeDraggingCardId, oldColumn._id, nextOverColumn._id, nextColumns)
+      }
+
       return nextColumns
     })
   }
@@ -179,14 +195,15 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
 
     // Xử lí logic ở đây chỉ khi kéo card qua 2 column khác nhau, giống column sẽ không làm gì
     if (activeColumn._id !== overColumn._id) {
-      moveCardBetweenDifferentColumns(
+      moveCardToDifferentColumns(
         overColumn,
         overCardId,
         active,
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        'handleDragOver'
       )
     }
   }
@@ -200,7 +217,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     if (!active || !over) return
 
     // activeDragItemType là cái mà chúng ta đang kéo
-    // Xử lí kéo thả Card 
+    // Xử lí kéo thả Card
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
       // activeDraggingCardId là cái mà chúng ta đang kéo
       const {
@@ -222,14 +239,15 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
       // Phải dùng tới oldColumn chứ không phải activeColumn, vì sau khi đi qua onDragOver thì state đã bị thay đổi
       // chưa kịp thả thì đã thay đổi state rồi, nên activeColumn lúc này luôn bằng overColumn
       if (oldColumn._id !== overColumn._id) {
-        moveCardBetweenDifferentColumns(
+        moveCardToDifferentColumns(
           overColumn,
           overCardId,
           active,
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         //lấy vị trí cũ của active, là vị trí 1, 2, 3, ... trong mảng
@@ -279,7 +297,6 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         setOrderedColumns(dndOrderedColumns)
 
         moveColumns(dndOrderedColumns)
-
       }
     }
 

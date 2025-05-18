@@ -16,6 +16,8 @@ import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utils/sort'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import { moveCardBetweenDifferentColumnAPI } from '~/apis'
+import Typography from '@mui/material/Typography'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -113,9 +115,33 @@ function Board() {
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds })
   }
 
+  // Di chuyeern card sang Column khác:
+  // B1: Cập nhật mảng cardOrderIds của Column ban đầu chứa nó (bản chất là xóa id của card ra khỏi mảng)
+  // B2: Cập nhật mảng cardOrderIds của Column tiếp theo (bản chất là thêm id của card mới vào)
+  // B3: Cập nhật lại trường columnId của card đã kéo
+  // => Làm một API support riêng
+  const moveCardBetweenDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    // Gọi API xử lý phía BE
+    moveCardBetweenDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: dndOrderedColumns.find((c) => c._id === prevColumnId)?.cardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)?.cardOrderIds
+    })
+  }
+
   if (!board) return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <CircularProgress />
+      <CircularProgress/>
+      <Typography>Loading...</Typography>
     </Box>
   )
 
@@ -129,6 +155,7 @@ function Board() {
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
+        moveCardBetweenDifferentColumn={moveCardBetweenDifferentColumn}
       />
     </Container>
   )

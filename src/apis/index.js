@@ -23,6 +23,12 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
   return response.data
 }
 
+export const moveCardBetweenDifferentColumnAPI = async (updateData) => {
+  const response = await axios.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
+  // Lưu ý: axios trả về kết quả qua data
+  return response.data
+}
+
 // Column API
 export const createNewColumnAPI = async (newColumnData) => {
   const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
