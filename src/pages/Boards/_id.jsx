@@ -171,7 +171,7 @@ function Board() {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
-        <Typography>Loading...</Typography>
+        <Typography sx={{ paddingLeft: '8px' }}>Loading...</Typography>
       </Box>
     )
 
