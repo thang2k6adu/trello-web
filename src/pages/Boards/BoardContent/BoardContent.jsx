@@ -1,7 +1,5 @@
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sort'
-
 /**
  * Imports drag and drop related utilities from @dnd-kit/core for implementing
  * interactive drag and drop functionality in the board component.
@@ -37,7 +35,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD',
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
@@ -59,8 +57,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
 
   // Board thay đổi thì mới dùng tới (vẫn chạy trong lần mount đầu tiên), đoạn này dùng khi gọi API
   useEffect(() => {
-    const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
-    setOrderedColumns(orderedColumns)
+    // Colum đã được sắp xếp bên component cha
+    setOrderedColumns(board.columns)
   }, [board])
 
   // Tìm column theo cardId
@@ -199,7 +197,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
     if (!active || !over) return
 
     // activeDragItemType là cái mà chúng ta đang kéo
-    // Xử lí kéo thả Card
+    // Xử lí kéo thả Card 
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
       // activeDraggingCardId là cái mà chúng ta đang kéo
       const {
@@ -239,7 +237,9 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
         // Dùng arrayMove để thay đổi cards khi kéo thả (mảng object) tương tự với column
         // arrayMove(oldColumn?.cards, oldCardIndex, newCardIndex) => trả về mảng mới với vị trí đã được thay đổi
         const dndOrderedCards = arrayMove(oldColumn?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCardIds = dndOrderedCards.map((card) => card._id)
 
+        // Vẫn gọi updateState để tránh bị flickering kéo thả
         setOrderedColumns((preColumns) => {
           // Bản chất là ta đang clone mảng OrderedColumnsState cũ ra một cái mới để xử lí data rồi return
           // Cập nhật lại OrderedColumnsState mới
@@ -252,6 +252,9 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
           targetColumn.cardOrderIds = dndOrderedCards.map((card) => card._id)
           return nextColumns
         })
+
+        // Gọi lên props moveCardInTheSameColumn
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumn._id)
       }
     }
 
@@ -268,11 +271,12 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
         // Xử lí thay đổi lên API, F5 không bị refresh (mảng giá trị)
 
-        moveColumns(dndOrderedColumns)
-
         // Vẫn gọi update state ở đây để tránh delay khi gọi API
         //cập nhật lại state sau khi kéo thả
         setOrderedColumns(dndOrderedColumns)
+
+        moveColumns(dndOrderedColumns)
+
       }
     }
 

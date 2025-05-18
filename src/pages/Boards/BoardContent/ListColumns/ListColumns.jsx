@@ -25,7 +25,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
       title: newColumnTitle,
     }
 
-    await createNewColumn(newColumnData)
+    createNewColumn(newColumnData)
 
     // Cập nhật state board
 
