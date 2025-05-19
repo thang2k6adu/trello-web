@@ -64,6 +64,7 @@ function Card({ card }) {
         }}
       >
         <Typography>{card?.title}</Typography>
+        <Typography>{card?.description}</Typography>
       </CardContent>
 
       {/* Card Action */}

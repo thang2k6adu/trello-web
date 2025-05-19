@@ -3,6 +3,6 @@ if (process.env.BUILD_MODE === 'dev') {
   apiRoot = 'http://localhost:3000'
 }
 if (process.env.BUILD_MODE === 'production') {
-  apiRoot = 'https://trello-api-4hev.onrender.com'
+  apiRoot = 'https://condemned-jeanie-thang2k6adu-87c8a0dd.koyeb.app'
 }
 export const API_ROOT = apiRoot
