@@ -55,6 +55,8 @@ function Board() {
       boardId: board._id,
     })
 
+    toast.success('Create new column successfully!')
+
     // Khi tạo mới column thì nó chưa có card, cần xử lí vấn đề kéo thả vào một column rỗng
     createdColumn.cards = [generatePlaceholderCard(createdColumn)]
     createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
@@ -73,6 +75,8 @@ function Board() {
       ...newCardData,
       boardId: board._id,
     })
+
+    toast.success('Create new card successfully!')
 
     // Cập nhật state board
     const newBoard = { ...board }

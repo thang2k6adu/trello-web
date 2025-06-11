@@ -53,6 +53,14 @@ function BoardContent({
   // Điểm va chạm cuối cùng trước đó (xử lý thuật toán phát hiện va chạm)
   const lastOverId = useRef(null)
 
+  const [openMenuCardModal, setOpenMenuCardModal] = useState(false)
+  const handleOpenMenuCardModal = () => {
+    setOpenMenuCardModal(true)
+  }
+  const handleCloseMenuCardModal = () => {
+    setOpenMenuCardModal(false)
+  }
+
   // activationConstrain: hạn chế kích hoạt, distance 10px mới kích hoạt kéo, fix click bị gọi event, tránh kéo thả không mong muốn
   // distance và tolerance, máy tính và điện thoại, dùng pointerSensor phải dùng thuộc tính touch-action + còn bugs
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
