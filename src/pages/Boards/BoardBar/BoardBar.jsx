@@ -96,7 +96,7 @@ function BoardBar({ board }) {
         <AvatarGroup
           max={7}
           sx={{
-            gap: '10px',
+            gap: '2px',
             '& .MuiAvatar-root': {
               width: 34,
               height: 34,
@@ -116,34 +116,34 @@ function BoardBar({ board }) {
               src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRCQRSAPveKPpNXjoO0ahdt2I3ygMrY2VCBqVENplCiHrGxKrT6fHiJvM-pQMSHMLOW-s1VxYajjKMyb0I"
             />
           </Tooltip>
-          <Tooltip title="thang2k6adu">
+          <Tooltip title="Cát Tường">
             <Avatar
               alt="thang2k6adu"
-              src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRCQRSAPveKPpNXjoO0ahdt2I3ygMrY2VCBqVENplCiHrGxKrT6fHiJvM-pQMSHMLOW-s1VxYajjKMyb0I"
+              src="https://images2.thanhnien.vn/528068263637045248/2024/3/1/edit-img5891-17093048704171093747158.jpeg"
             />
           </Tooltip>
-          <Tooltip title="thang2k6adu">
+          <Tooltip title="Sơn Tùng">
             <Avatar
               alt="thang2k6adu"
-              src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRCQRSAPveKPpNXjoO0ahdt2I3ygMrY2VCBqVENplCiHrGxKrT6fHiJvM-pQMSHMLOW-s1VxYajjKMyb0I"
+              src="https://media-cdn-v2.laodong.vn/storage/newsportal/2024/12/19/1437715/Son-Tung.jpeg"
             />
           </Tooltip>
-          <Tooltip title="thang2k6adu">
+          <Tooltip title="Tiên Tiên">
             <Avatar
               alt="thang2k6adu"
-              src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRCQRSAPveKPpNXjoO0ahdt2I3ygMrY2VCBqVENplCiHrGxKrT6fHiJvM-pQMSHMLOW-s1VxYajjKMyb0I"
+              src="https://kenh14cdn.com/203336854389633024/2022/10/31/tien-tien-chia-se-hinh-anh-nam-tay-ban-gai-nhung-nhat-quyet-giau-kin-mat1-13014869-16672149891191035556599.jpg"
             />
           </Tooltip>
-          <Tooltip title="thang2k6adu">
+          <Tooltip title="Thắng đẹp chai">
             <Avatar
               alt="thang2k6adu"
-              src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRCQRSAPveKPpNXjoO0ahdt2I3ygMrY2VCBqVENplCiHrGxKrT6fHiJvM-pQMSHMLOW-s1VxYajjKMyb0I"
+              src="https://cellphones.com.vn/sforum/wp-content/uploads/2024/02/avatar-anh-meo-cute-5.jpg"
             />
           </Tooltip>
-          <Tooltip title="thang2k6adu">
+          <Tooltip title="Ciao">
             <Avatar
               alt="thang2k6adu"
-              src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRCQRSAPveKPpNXjoO0ahdt2I3ygMrY2VCBqVENplCiHrGxKrT6fHiJvM-pQMSHMLOW-s1VxYajjKMyb0I"
+              src="https://upload-os-bbs.hoyolab.com/upload/2025/02/12/423331180/4237e536ce8b31d839e79af0b93957dc_1506769670917224663.webp?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
             />
           </Tooltip>
           <Tooltip title="thang2k6adu">

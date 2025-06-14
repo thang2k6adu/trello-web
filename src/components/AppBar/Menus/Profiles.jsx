@@ -47,26 +47,36 @@ function Profiles() {
           'aria-labelledby': 'basic-button-profiles',
         }}
       >
-        <MenuItem >
-          <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> Profile
+        <MenuItem>
+          <Avatar
+            sx={{ width: '28px', height: '28px', mr: 2 }}
+            alt="Vũ Cát Tường"
+            src="https://images2.thanhnien.vn/528068263637045248/2025/2/9/vu-cat-tuong-4-1739081808195881252759.jpg"
+          />{' '}
+          Profile
         </MenuItem>
-        <MenuItem >
-          <Avatar sx={{ width: '28px', height: '28px', mr: 2 }} /> My account
+        <MenuItem>
+          <Avatar
+            sx={{ width: '28px', height: '28px', mr: 2 }}
+            alt="Vũ Cát Tường"
+            src="https://images2.thanhnien.vn/528068263637045248/2025/2/9/vu-cat-tuong-4-1739081808195881252759.jpg"
+          />{' '}
+          My account
         </MenuItem>
         <Divider />
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
           Add another account
         </MenuItem>
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
