@@ -9,7 +9,7 @@ import { API_ROOT } from '~/utils/constants'
 // Interceptor là một hàm được gọi trước khi request được gửi đi
 // Hiểu đơn giản là đánh chặn vào giữa request và response để xử lí logic ta muốn
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/v1'
+const API_URL = API_ROOT || 'http://localhost:3000/v1'
 
 const api = axios.create({
   baseURL: API_URL,
