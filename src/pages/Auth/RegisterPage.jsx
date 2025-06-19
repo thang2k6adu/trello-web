@@ -17,6 +17,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import { authAPI } from '~/apis'
 import { useNavigate } from 'react-router-dom'
+import { ReactComponent as TrelloIcon } from '~/assets/mdi--trello.svg'
+import SvgIcon from '@mui/material/SvgIcon'
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -93,10 +95,10 @@ const RegisterPage = () => {
       const { confirmPassword, ...registerData } = formData
       await authAPI.register(registerData)
       // Show success message and redirect to login
-      navigate('/login', { 
-        state: { 
-          message: 'Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.' 
-        }
+      navigate('/login', {
+        state: {
+          message: 'Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.',
+        },
       })
     } catch (error) {
       setError(error.message || 'Đăng ký thất bại. Vui lòng thử lại.')
@@ -106,162 +108,174 @@ const RegisterPage = () => {
   }
 
   return (
-    <Container maxWidth="sm">
-      <StyledPaper elevation={3}>
-        <Typography 
-          variant="h4" 
-          align="center" 
-          gutterBottom
-          sx={{ 
-            fontWeight: 600,
-            color: 'primary.main',
-            mb: 4
-          }}
-        >
-          Đăng ký tài khoản
-        </Typography>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <StyledTextField
-            label="Họ và tên"
-            name="name"
-            fullWidth
-            margin="normal"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            autoComplete="name"
-            placeholder="Nhập họ và tên của bạn"
-          />
-          <StyledTextField
-            label="Email"
-            name="email"
-            fullWidth
-            margin="normal"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            type="email"
-            autoComplete="email"
-            placeholder="Nhập email của bạn"
-          />
-          <StyledTextField
-            select
-            label="Quốc gia"
-            name="country"
-            fullWidth
-            margin="normal"
-            value={formData.country}
-            onChange={handleChange}
-            required
-          >
-            {countries.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </StyledTextField>
-          <StyledTextField
-            label="Mật khẩu"
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            fullWidth
-            margin="normal"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            autoComplete="new-password"
-            placeholder="Nhập mật khẩu của bạn"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <StyledTextField
-            label="Xác nhận mật khẩu"
-            name="confirmPassword"
-            type={showConfirmPassword ? 'text' : 'password'}
-            fullWidth
-            margin="normal"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-            autoComplete="new-password"
-            placeholder="Nhập lại mật khẩu của bạn"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    edge="end"
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            size="large"
-            disabled={loading}
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100vh' }}>
+      <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 0.5 }}>
+          <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: 'primary.main', fontSize: '7rem' }} />
+          <Typography
+            variant="span"
             sx={{
-              mt: 3,
-              mb: 2,
-              py: 1.5,
-              borderRadius: 2,
-              textTransform: 'none',
-              fontSize: '1.1rem',
-              background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-              boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
-              },
+              display: 'block',
+              fontSize: '6rem',
+              fontWeight: 'bold',
+              color: '#253858',
+              lineHeight: '6rem',
             }}
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              'Đăng ký'
-            )}
-          </Button>
-          <Box sx={{ textAlign: 'center', mt: 2 }}>
-            <Typography variant="body2" color="text.secondary">
-              Đã có tài khoản?{' '}
-              <Link
-                href="/login"
-                sx={{
-                  color: 'primary.main',
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    textDecoration: 'underline',
-                  },
-                }}
-              >
-                Đăng nhập
-              </Link>
-            </Typography>
-          </Box>
+            Trello
+          </Typography>
         </Box>
-      </StyledPaper>
-    </Container>
+        <Box sx={{ fontSize: '1.2rem', color: 'text.secondary', mt: 0, textAlign: 'left', ml: 1 }}>
+          Ghi lại, sắp xếp và giải quyết việc cần làm từ bất cứ đâu.
+        </Box>
+      </Container>
+      <Container maxWidth="sm">
+        <StyledPaper elevation={3}>
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{
+              fontWeight: 600,
+              color: 'primary.main',
+              mb: 4,
+            }}
+          >
+            Đăng ký tài khoản
+          </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          <Box component="form" onSubmit={handleSubmit} noValidate>
+            <StyledTextField
+              label="Họ và tên"
+              name="name"
+              fullWidth
+              margin="normal"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              autoComplete="name"
+              placeholder="Nhập họ và tên của bạn"
+            />
+            <StyledTextField
+              label="Email"
+              name="email"
+              fullWidth
+              margin="normal"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              type="email"
+              autoComplete="email"
+              placeholder="Nhập email của bạn"
+            />
+            <StyledTextField
+              select
+              label="Quốc gia"
+              name="country"
+              fullWidth
+              margin="normal"
+              value={formData.country}
+              onChange={handleChange}
+              required
+            >
+              {countries.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </StyledTextField>
+            <StyledTextField
+              label="Mật khẩu"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              margin="normal"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              autoComplete="new-password"
+              placeholder="Nhập mật khẩu của bạn"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <StyledTextField
+              label="Xác nhận mật khẩu"
+              name="confirmPassword"
+              type={showConfirmPassword ? 'text' : 'password'}
+              fullWidth
+              margin="normal"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              autoComplete="new-password"
+              placeholder="Nhập lại mật khẩu của bạn"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              size="large"
+              disabled={loading}
+              sx={{
+                mt: 3,
+                mb: 2,
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: 'none',
+                fontSize: '1.1rem',
+                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
+                },
+              }}
+            >
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Đăng ký'}
+            </Button>
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                Đã có tài khoản?{' '}
+                <Link
+                  href="/login"
+                  sx={{
+                    color: 'primary.main',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Đăng nhập
+                </Link>
+              </Typography>
+            </Box>
+          </Box>
+        </StyledPaper>
+      </Container>
+    </Box>
   )
 }
 
