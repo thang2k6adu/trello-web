@@ -7,6 +7,7 @@ import LoadingScreen from '~/components/LoadingScreen.jsx'
 import { Suspense } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import './index.css' // <-- import Tailwind
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <AppProviders>

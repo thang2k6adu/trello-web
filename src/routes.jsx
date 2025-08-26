@@ -4,6 +4,8 @@ import { Navigate } from 'react-router-dom'
 const Board = lazy(() => import('~/pages/Boards/_id'))
 const LoginPage = lazy(() => import('~/pages/Auth/LoginPage'))
 const RegisterPage = lazy(() => import('~/pages/Auth/RegisterPage'))
+// const TrelloSideBar = lazy(() => import('~/pages/HomePage/index'))
+const TrelloSideBar = lazy(() => import('~/pages/HomePage/layout/Layout'))
 
 export const isAuthenticated = () => Boolean(localStorage.getItem('token'))
 
@@ -20,7 +22,7 @@ export const PublicOnly = ({ children }) => {
 export const routes = [
   {
     path: '/',
-    element: isAuthenticated() ? <Navigate to="/boards" replace /> : <Navigate to="/login" replace />
+    element: isAuthenticated() ? <Navigate to="/boards" replace /> : <Navigate to="/login" replace />,
   },
   {
     path: '/login',
@@ -28,7 +30,7 @@ export const routes = [
       <PublicOnly>
         <LoginPage />
       </PublicOnly>
-    )
+    ),
   },
   {
     path: '/register',
@@ -36,7 +38,7 @@ export const routes = [
       <PublicOnly>
         <RegisterPage />
       </PublicOnly>
-    )
+    ),
   },
   {
     path: '/boards',
@@ -44,7 +46,7 @@ export const routes = [
       <Protected>
         <Board />
       </Protected>
-    )
+    ),
   },
   {
     path: '/boards/:boardId',
@@ -52,8 +54,14 @@ export const routes = [
       <Protected>
         <Board />
       </Protected>
-    )
-  }
+    ),
+  },
+  {
+    path: '/homePage/',
+    element: (
+      <Protected>
+        <TrelloSideBar />
+      </Protected>
+    ),
+  },
 ]
-
-
