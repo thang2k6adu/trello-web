@@ -1,7 +1,7 @@
 import { Search, Plus, Bell, Grid3X3, User, Settings, ChevronUp, Clock, Users, Cog, Crown } from 'lucide-react'
 import WorkspaceCard from './WorkSpaceCard'
 
-export default function RecentlyViewed() {
+export default function RecentlyViewed({ boards }) {
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-4">
@@ -10,8 +10,9 @@ export default function RecentlyViewed() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <WorkspaceCard title="idurar-erp-crm" image="/desert-landscape-with-white-buildings.png" />
-        <WorkspaceCard title="trello" image="/desert-landscape-with-white-buildings.png" />
+        {boards?.map((board) => (
+          <WorkspaceCard key={ board._id} title={board.title} image="/desert-landscape-with-white-buildings.png" />
+        ))}
       </div>
     </div>
   )

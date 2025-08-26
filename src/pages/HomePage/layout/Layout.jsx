@@ -1,20 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box } from '@mui/material'
-import Header from './components/Header'
+// import Header from './components/Header'
+import AppBar from '~/components/AppBar/AppBar'
 import Sidebar from './components/SideBar/Sidebar'
-import MainContent from './components/MainContent'
 import RecentlyViewed from './components/SideBar/RecenlyViewed'
 import Workspaces from './components/SideBar/WorkSpaces'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectBoards } from '~/redux/board/boardSelectors'
+import { fetchBoards } from '~/redux/board/boardSlice'
+import { toast } from 'react-toastify'
 
 export default function Layout() {
+  const dispatch = useDispatch()
+  console.log(useSelector(selectBoards))
+  const { boards, loading, error } = useSelector(selectBoards)
+
+  useEffect(() => {
+    dispatch(fetchBoards())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (error) toast.error(error)
+  }, [error])
+
+  if (loading) return <p>Loading...</p>
+
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <AppBar />
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6">
-          <RecentlyViewed />
-          <Workspaces />
+          <RecentlyViewed boards={boards} />
+          <Workspaces boards={boards} />
         </main>
       </div>
     </div>
