@@ -41,14 +41,6 @@ export const routes = [
     ),
   },
   {
-    path: '/boards',
-    element: (
-      <Protected>
-        <Board />
-      </Protected>
-    ),
-  },
-  {
     path: '/boards/:boardId',
     element: (
       <Protected>

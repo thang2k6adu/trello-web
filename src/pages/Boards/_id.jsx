@@ -20,13 +20,16 @@ import { moveCardBetweenDifferentColumnAPI } from '~/apis'
 import { delteColumnDetailsAPI } from '~/apis'
 import Typography from '@mui/material/Typography'
 import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 
 function Board() {
   const [board, setBoard] = useState(null)
 
+  const { boardId } = useParams()
+
+
   useEffect(() => {
     // Tạm thời fix cứng boardId
-    const boardId = '6820b46f776dc4a9a7cbfa31'
     fetchBoardDetailsAPI(boardId)
       .then((board) => {
         // Sắp xếp thứ tự các column ở đây luôn trước khi đưa dữ liệu xuống bên dưới

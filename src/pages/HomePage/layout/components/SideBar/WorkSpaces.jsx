@@ -1,13 +1,18 @@
 import { Search, Plus, Bell, Grid3X3, User, Settings, ChevronUp, Clock, Users, Cog, Crown } from 'lucide-react'
 import WorkspaceCard from './WorkSpaceCard'
 import WorkspaceAction from './WorkSpaceAction'
+import { useNavigate } from 'react-router-dom'
+import { useCallback } from 'react'
 
-export default function Workspaces() {
-  const workspaces = [
-    { title: 'idurar-erp-crm', image: '/desert-landscape-with-white-buildings.png' },
-    { title: 'trello', image: '/desert-landscape-with-white-buildings.png' },
-  ]
+export default function Workspaces({ boards }) {
+  const navigate = useNavigate()
 
+  const handleClick = useCallback(
+    (id) => {
+      navigate(`/boards/${id}`)
+    },
+    [navigate]
+  )
   return (
     <div>
       <h2 className="text-lg font-semibold text-gray-800 mb-6">CÁC KHÔNG GIAN LÀM VIỆC CỦA BẠN</h2>
@@ -31,8 +36,13 @@ export default function Workspaces() {
 
         <div className="flex gap-4">
           <div className="grid grid-cols-2 gap-4 flex-1">
-            {workspaces.map((ws) => (
-              <WorkspaceCard key={ws.title} title={ws.title} image={ws.image} />
+            {boards.map((board) => (
+              <WorkspaceCard
+                onClick={() => handleClick(board._id)}
+                key={board.title}
+                title={board.title}
+                image={board.image}
+              />
             ))}
           </div>
 
