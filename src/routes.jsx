@@ -22,7 +22,7 @@ export const PublicOnly = ({ children }) => {
 export const routes = [
   {
     path: '/',
-    element: isAuthenticated() ? <Navigate to="/boards" replace /> : <Navigate to="/login" replace />,
+    element: isAuthenticated() ? <Navigate to="/HomePage" replace /> : <Navigate to="/login" replace />,
   },
   {
     path: '/login',
