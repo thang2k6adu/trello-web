@@ -26,7 +26,7 @@ export default function RecentlyViewed({ boards }) {
             onClick={() => handleClick(board._id)}
             key={board._id}
             title={board.title}
-            image="/desert-landscape-with-white-buildings.png"
+            image="https://cdn-media.sforum.vn/storage/app/media/anh-dep-14.jpg"
           />
         ))}
       </div>
