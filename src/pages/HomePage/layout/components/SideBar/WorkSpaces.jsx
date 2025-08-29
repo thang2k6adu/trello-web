@@ -3,6 +3,7 @@ import WorkspaceCard from './WorkSpaceCard'
 import WorkspaceAction from './WorkSpaceAction'
 import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
+import { FILE_BASE_URL } from '~/config/serverApiConfig'
 
 export default function Workspaces({ openModal, boards }) {
   const navigate = useNavigate()
@@ -41,7 +42,7 @@ export default function Workspaces({ openModal, boards }) {
                 onClick={() => handleClick(board._id)}
                 key={board.title}
                 title={board.title}
-                image={board.image}
+                image={`${board.image}`}
               />
             ))}
             <div onClick={openModal} className="h-full">

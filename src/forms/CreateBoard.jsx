@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import { X, ChevronDown } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { addBoard, fetchBoards } from '~/redux/board/boardSlice'
 
 // data
 const backgroundImages = [
@@ -122,6 +124,7 @@ function BoardTitleInput({ value, onChange, error }) {
         type="text"
         value={value}
         onChange={onChange}
+        style={{ color: '#000' }}
         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
           error ? 'border-red-500' : 'border-gray-300'
         }`}
@@ -153,11 +156,14 @@ function ViewPermissionSelector({ value, onChange }) {
 
         {open && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-            {['Không gian làm việc', 'Riêng tư'].map((opt) => (
+            {[
+              { label: 'Công khai', value: 'public' },
+              { label: 'Riêng tư', value: 'private' },
+            ].map((opt) => (
               <button
                 key={opt}
                 onClick={() => {
-                  onChange(opt)
+                  onChange(opt.value)
                   setOpen(false)
                 }}
                 className="w-full px-3 py-2 text-left hover:bg-gray-50 text-gray-700"
@@ -214,14 +220,25 @@ export default function BoardCreationModal({ onClose }) {
   const [selectedBackground, setSelectedBackground] = useState(0)
   const [boardTitle, setBoardTitle] = useState('')
   const [showTitleError, setShowTitleError] = useState(false)
-  const [viewPermission, setViewPermission] = useState('Không gian làm việc')
+  const [viewPermission, setViewPermission] = useState('public')
+  const [color, setColor] = useState('')
+  const dispatch = useDispatch()
 
   const handleCreateBoard = () => {
     if (!boardTitle.trim()) {
       setShowTitleError(true)
       return
     }
-    console.log('Creating board:', { title: boardTitle, background: selectedBackground })
+
+    dispatch(
+      addBoard({
+        title: boardTitle,
+        color,
+        image: backgroundImages[selectedBackground] || gradientColors[selectedBackground],
+        type: viewPermission,
+      })
+    )
+
     onClose()
   }
 

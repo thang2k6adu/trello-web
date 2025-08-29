@@ -2,6 +2,7 @@ import { Search, Plus, Bell, Grid3X3, User, Settings, ChevronUp, Clock, Users, C
 import WorkspaceCard from './WorkSpaceCard'
 import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
+import { FILE_BASE_URL } from '~/config/serverApiConfig'
 
 export default function RecentlyViewed({ boards }) {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ export default function RecentlyViewed({ boards }) {
             onClick={() => handleClick(board._id)}
             key={board._id}
             title={board.title}
-            image="https://cdn-media.sforum.vn/storage/app/media/anh-dep-14.jpg"
+            image={`${board.image}`}
           />
         ))}
       </div>
