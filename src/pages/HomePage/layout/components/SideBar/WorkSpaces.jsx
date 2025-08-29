@@ -4,7 +4,7 @@ import WorkspaceAction from './WorkSpaceAction'
 import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
 
-export default function Workspaces({ boards }) {
+export default function Workspaces({ openModal, boards }) {
   const navigate = useNavigate()
 
   const handleClick = useCallback(
@@ -46,7 +46,7 @@ export default function Workspaces({ boards }) {
             ))}
           </div>
 
-          <div className="w-48">
+          <div onClick={openModal} className="w-48">
             <div className="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors cursor-pointer">
               <Plus className="w-8 h-8 text-gray-400 mx-auto mb-2" />
               <span className="text-sm text-gray-600">Tạo bảng mới</span>

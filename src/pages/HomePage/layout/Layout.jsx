@@ -9,10 +9,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectBoards } from '~/redux/board/boardSelectors'
 import { fetchBoards } from '~/redux/board/boardSlice'
 import { toast } from 'react-toastify'
+import BoardCreationModal from '~/forms/CreateBoard'
 
 export default function Layout() {
   const dispatch = useDispatch()
-  console.log(useSelector(selectBoards))
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const handleClick = () => {
+    setIsModalOpen(true)
+  }
   const { boards, loading, error } = useSelector(selectBoards)
 
   useEffect(() => {
@@ -32,7 +36,8 @@ export default function Layout() {
         <Sidebar />
         <main className="flex-1 p-6">
           <RecentlyViewed boards={boards} />
-          <Workspaces boards={boards} />
+          <Workspaces openModal={handleClick} boards={boards} />
+          {isModalOpen && <BoardCreationModal onClose={() => setIsModalOpen(false)}/>}
         </main>
       </div>
     </div>
