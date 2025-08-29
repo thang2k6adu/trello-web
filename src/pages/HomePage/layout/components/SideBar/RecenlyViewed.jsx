@@ -20,7 +20,7 @@ export default function RecentlyViewed({ boards }) {
         <h2 className="text-lg font-semibold text-gray-800">Đã xem gần đây</h2>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
         {boards?.map((board) => (
           <WorkspaceCard
             onClick={() => handleClick(board._id)}

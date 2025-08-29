@@ -1,4 +1,5 @@
-import { Search, Plus, Bell, Grid3X3, User, Settings, ChevronUp, Clock, Users, Cog, Crown } from 'lucide-react'
+import { Trello, Layout, Activity } from 'lucide-react';
+
 import SidebarLink from './SidebarLink'
 import WorkspaceSidebar from './WorkSpaceSidebar'
 
@@ -7,9 +8,9 @@ export default function Sidebar() {
     <aside className="w-64 bg-white border-r border-gray-200 min-h-screen">
       <nav className="p-4">
         <ul className="space-y-2">
-          <SidebarLink Icon={Grid3X3} label="Bảng" active />
-          <SidebarLink label="Mẫu" />
-          <SidebarLink label="Trang chủ" />
+          <SidebarLink Icon={Trello} label="Bảng" active />
+          <SidebarLink label="Mẫu" Icon={Layout}/>
+          <SidebarLink label="Trang chủ" Icon={Activity}/>
         </ul>
 
         <div className="mt-8">

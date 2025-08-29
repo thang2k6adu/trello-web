@@ -35,7 +35,7 @@ export default function Workspaces({ openModal, boards }) {
         </div>
 
         <div className="flex gap-4">
-          <div className="grid grid-cols-2 gap-4 flex-1">
+          <div className="grid grid-cols-4 gap-4 flex-1 items-stretch">
             {boards.map((board) => (
               <WorkspaceCard
                 onClick={() => handleClick(board._id)}
@@ -44,12 +44,15 @@ export default function Workspaces({ openModal, boards }) {
                 image={board.image}
               />
             ))}
-          </div>
-
-          <div onClick={openModal} className="w-48">
-            <div className="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors cursor-pointer">
-              <Plus className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <span className="text-sm text-gray-600">Tạo bảng mới</span>
+            <div onClick={openModal} className="h-full">
+              <div
+                className="h-full bg-gray-50 rounded-lg p-4 hover:bg-gray-100 
+                transition-colors cursor-pointer
+                flex flex-col items-center justify-center text-center"
+              >
+                <Plus className="w-8 h-8 text-gray-400 mb-2" />
+                <span className="text-sm text-gray-600">Tạo bảng mới</span>
+              </div>
             </div>
           </div>
         </div>

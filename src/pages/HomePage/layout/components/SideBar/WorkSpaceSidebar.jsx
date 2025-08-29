@@ -1,4 +1,4 @@
-import { Search, Plus, Bell, Grid3X3, User, Settings, ChevronUp, Clock, Users, Cog, Crown } from 'lucide-react'
+import { Search, Plus, Bell, Trello, User, Settings, ChevronUp, Clock, Users, Cog, Crown } from 'lucide-react'
 import SidebarLink from './SidebarLink'
 
 export default function WorkspaceSidebar() {
@@ -15,7 +15,7 @@ export default function WorkspaceSidebar() {
       </div>
 
       <div className="ml-8 space-y-1">
-        <SidebarLink Icon={Grid3X3} label="Bảng" />
+        <SidebarLink Icon={Trello} label="Bảng" />
         <SidebarLink Icon={Users} label="Thành viên" actionIcon={Plus} />
         <SidebarLink Icon={Settings} label="Cài đặt" />
       </div>
