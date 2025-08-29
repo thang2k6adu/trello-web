@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000/v1/boards'
-
+const API_URL = import.meta.BUILD_MODE === 'production' ? 'https://condemned-jeanie-thang2k6adu-87c8a0dd.koyeb.app/v1/boards' : 'http://localhost:3000/v1/boards'
 // Config axios: gắn token từ localStorage
 const instance = axios.create({
   baseURL: API_URL,
