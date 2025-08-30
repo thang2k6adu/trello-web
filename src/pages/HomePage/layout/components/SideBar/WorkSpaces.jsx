@@ -43,6 +43,7 @@ export default function Workspaces({ openModal, boards }) {
                 key={board.title}
                 title={board.title}
                 image={`${board.image}`}
+                color={board.color}
               />
             ))}
             <div onClick={openModal} className="h-full">

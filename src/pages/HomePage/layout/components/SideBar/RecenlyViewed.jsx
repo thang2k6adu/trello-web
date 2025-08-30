@@ -28,6 +28,7 @@ export default function RecentlyViewed({ boards }) {
             key={board._id}
             title={board.title}
             image={`${board.image}`}
+            color={board.color}
           />
         ))}
       </div>

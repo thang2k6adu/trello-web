@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectBoards } from '~/redux/board/boardSelectors'
 import { fetchBoards } from '~/redux/board/boardSlice'
 import { toast } from 'react-toastify'
-import BoardCreationModal from '~/forms/CreateBoard'
+import BoardCreationModal from '~/forms/CreateBoard/CreateBoard'
 
 export default function Layout() {
   const dispatch = useDispatch()
