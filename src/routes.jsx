@@ -49,7 +49,7 @@ export const routes = [
     ),
   },
   {
-    path: '/homePage/',
+    path: '/HomePage/',
     element: (
       <Protected>
         <TrelloSideBar />
